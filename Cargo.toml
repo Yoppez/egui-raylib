@@ -2,11 +2,15 @@
 name = "egui-raylib"
 version = "0.1.0"
 edition = "2024"
+description = "Egui bindings for Raylib"
+readme = "README.md"
+repository = "https://github.com/Yoppez/egui-raylib"
+keywords = ["egui", "raylib", "bindings", "gui", "gamedev"]
+categories = ["game-development", "graphics", "gui"]
 license = "MIT"
 
 [dependencies]
 egui = "0.35.0"
-egui_demo_lib = "0.35.0"
 raylib = { version = "6.0", default-features = false, features = [
   "SUPPORT_IMAGE_GENERATION",
 ] }
