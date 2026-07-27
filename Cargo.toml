@@ -17,7 +17,7 @@ raylib = { version = "6.0", default-features = false, features = [
 
 [features]
 wayland = ["raylib/wayland"]
-x11 = ["raylib/x11"]
+x11 = ["raylib/GLFW_BUILD_X11"]
 
 [package.metadata.docs.rs]
 features = ["wayland"]
