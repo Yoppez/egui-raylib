@@ -14,3 +14,10 @@ egui = "0.35.0"
 raylib = { version = "6.0", default-features = false, features = [
   "SUPPORT_IMAGE_GENERATION",
 ] }
+
+[features]
+wayland = ["raylib/wayland"]
+x11 = ["raylib/x11"]
+
+[package.metadata.docs.rs]
+features = ["wayland"]
