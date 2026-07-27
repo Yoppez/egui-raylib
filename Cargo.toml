@@ -1,0 +1,12 @@
+[package]
+name = "egui-raylib"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+
+[dependencies]
+egui = "0.35.0"
+egui_demo_lib = "0.35.0"
+raylib = { version = "6.0", default-features = false, features = [
+  "SUPPORT_IMAGE_GENERATION",
+] }
