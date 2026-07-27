@@ -1,6 +1,6 @@
 [package]
 name = "egui-raylib"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2024"
 description = "Egui bindings for Raylib"
 readme = "README.md"
@@ -16,7 +16,7 @@ raylib = { version = "6.0", default-features = false, features = [
 ] }
 
 [features]
-wayland = ["raylib/wayland"]
+wayland = ["raylib/GLFW_BUILD_WAYLAND"]
 x11 = ["raylib/GLFW_BUILD_X11"]
 
 [package.metadata.docs.rs]
