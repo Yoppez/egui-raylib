@@ -10,6 +10,7 @@ Inside the `Cargo.toml` file:
 
 ```toml
 [dependencies]
+raylib = "6.0" # you can use any raylib feature
 egui-raylib = "0.1"
 ```
 
@@ -52,6 +53,8 @@ fn main() {
     }
 }
 ```
+
+You can check the examples for testing the default egui demo.
 
 ## Todo
 
