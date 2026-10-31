@@ -10,7 +10,7 @@ use sola_raylib::{error::Error, prelude::*};
 
 struct InputState {
     last_window_focused: Option<bool>,
-    last_is_cursor_on_screen: Option<bool>
+    last_is_cursor_on_screen: Option<bool>,
 }
 
 pub struct EguiRaylib {
@@ -32,7 +32,7 @@ impl EguiRaylib {
             pixels_per_point,
             input_state: InputState {
                 last_window_focused: None,
-                last_is_cursor_on_screen: None
+                last_is_cursor_on_screen: None,
             },
         }
     }

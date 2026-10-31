@@ -32,10 +32,13 @@ fn main() {
     // Initialization code
 
     while !rl.window_should_close() {
+
         // Logic
 
         egui.run(&mut rl, |ui| {
+
             // Ui
+
         });
 
         rl.draw(&thread, |mut d| {
@@ -46,6 +49,7 @@ fn main() {
             egui.draw(&mut d, &thread).unwrap();
 
             // Draw after egui
+            
         });
     }
 }
