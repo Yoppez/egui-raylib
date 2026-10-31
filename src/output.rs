@@ -1,5 +1,5 @@
 use egui::{CursorIcon, OutputCommand, PlatformOutput};
-use raylib::prelude::*;
+use sola_raylib::prelude::*;
 
 fn map_cursor(cursor: CursorIcon) -> Option<MouseCursor> {
     match cursor {

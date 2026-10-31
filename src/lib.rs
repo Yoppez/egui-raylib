@@ -6,20 +6,7 @@ mod textures;
 use std::collections::HashMap;
 
 use egui::{ClippedPrimitive, Context, TextureId, TexturesDelta, Ui};
-use raylib::prelude::*;
-
-use crate::textures::HandleTexturesErrors;
-
-#[derive(Debug)]
-pub enum EguiRaylibError {
-    HandleTexturesErrors(HandleTexturesErrors),
-}
-
-impl From<HandleTexturesErrors> for EguiRaylibError {
-    fn from(value: HandleTexturesErrors) -> Self {
-        EguiRaylibError::HandleTexturesErrors(value)
-    }
-}
+use sola_raylib::{error::Error, prelude::*};
 
 pub struct EguiRaylib {
     ctx: egui::Context,
@@ -36,7 +23,7 @@ impl EguiRaylib {
             textures: HashMap::new(),
             last_textures_delta: None,
             last_clipped_primitives: None,
-            pixels_per_point: pixels_per_point,
+            pixels_per_point,
         }
     }
 
@@ -60,15 +47,11 @@ impl EguiRaylib {
         self.last_textures_delta = Some(full_output.textures_delta);
     }
 
-    pub fn draw(
-        &mut self,
-        d: &mut RaylibDrawHandle,
-        thread: &RaylibThread,
-    ) -> Result<(), EguiRaylibError> {
+    pub fn draw(&mut self, d: &mut RaylibDrawHandle, thread: &RaylibThread) -> Result<(), Error> {
         if let Some(textures_delta) = &self.last_textures_delta {
-            match textures::handle_textures(&mut self.textures, d, &thread, &textures_delta) {
+            match textures::handle_textures(&mut self.textures, d, thread, textures_delta) {
                 Ok(()) => self.last_textures_delta = None,
-                Err(err) => return Err(err.into()),
+                Err(err) => return Err(err),
             }
         }
 

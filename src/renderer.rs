@@ -1,7 +1,13 @@
 use std::collections::HashMap;
 
 use egui::{ClippedPrimitive, TextureId, epaint::Primitive};
-use raylib::prelude::*;
+use sola_raylib::{
+    ffi::{
+        RL_TRIANGLES, rlBegin, rlColor4ub, rlDisableBackfaceCulling, rlDisableDepthTest,
+        rlDisableTexture, rlEnd, rlSetTexture, rlTexCoord2f, rlVertex2f,
+    },
+    prelude::*,
+};
 
 pub(crate) fn render(
     d: &mut RaylibDrawHandle,
@@ -9,8 +15,11 @@ pub(crate) fn render(
     primitives: &[ClippedPrimitive],
     texture_map: &HashMap<TextureId, Texture2D>,
 ) {
-    d.rl_disable_depth_test();
-    d.rl_disable_backface_culling();
+    unsafe {
+        rlDisableDepthTest();
+        rlDisableBackfaceCulling();
+    }
+
     d.draw_blend_mode(BlendMode::BLEND_ALPHA_PREMULTIPLY, |mut d| {
         for primitive in primitives {
             match &primitive.primitive {
@@ -24,28 +33,35 @@ pub(crate) fn render(
                             clip.min.y as i32,
                             clip.max.x as i32 - clip.min.x as i32,
                             clip.max.y as i32 - clip.min.y as i32,
-                            |mut s| {
-                                s.rl_set_texture(texture);
-                                s.rl_draw(DrawMode::Triangles, |v| {
-                                    for indices_triple in indices.chunks_exact(3) {
-                                        for index in indices_triple {
-                                            let vertex = vertices[*index as usize];
+                            |_| {
+                                unsafe {
+                                    rlSetTexture(texture.id);
+                                    rlBegin(RL_TRIANGLES as i32);
+                                }
+                                for indices_triple in indices.as_chunks::<3>().0 {
+                                    for index in indices_triple {
+                                        let vertex = vertices[*index as usize];
 
-                                            v.color4ub((
+                                        unsafe {
+                                            rlColor4ub(
                                                 vertex.color.r(),
                                                 vertex.color.g(),
                                                 vertex.color.b(),
                                                 vertex.color.a(),
-                                            ));
-                                            v.texcoord2f(vertex.uv.x, vertex.uv.y);
-                                            v.vertex2f(
+                                            );
+
+                                            rlTexCoord2f(vertex.uv.x, vertex.uv.y);
+                                            rlVertex2f(
                                                 vertex.pos.x * pixels_per_point,
                                                 vertex.pos.y * pixels_per_point,
                                             );
                                         }
                                     }
-                                });
-                                s.rl_disable_texture();
+                                }
+                                unsafe {
+                                    rlEnd();
+                                    rlDisableTexture();
+                                }
                             },
                         );
                     }

@@ -1,4 +1,4 @@
-use raylib::prelude::*;
+use sola_raylib::prelude::*;
 
 use egui::{
     Event, Key, Modifiers, MouseWheelUnit, PointerButton, Pos2, RawInput, Rect, TouchPhase, Vec2,
@@ -322,7 +322,7 @@ fn add_event_pointer(
     let mouse_vector = rl.get_mouse_position();
     let mouse_pos = Pos2::new(mouse_vector.x, mouse_vector.y) / pixels_per_point;
 
-    if mouse_delta != Vector2::ZERO {
+    if mouse_delta != Vector2::zero() {
         events.push(Event::PointerMoved(mouse_pos));
     }
 

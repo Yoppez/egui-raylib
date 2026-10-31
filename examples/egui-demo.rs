@@ -1,10 +1,10 @@
 use egui_raylib::EguiRaylib;
 
 use egui_demo_lib::DemoWindows;
-use raylib::prelude::*;
+use sola_raylib::prelude::*;
 
 fn main() {
-    let (mut rl, thread) = raylib::init()
+    let (mut rl, thread) = sola_raylib::init()
         .size(640, 480)
         .title("Hello, World")
         .resizable()
@@ -22,7 +22,7 @@ fn main() {
         rl.draw(&thread, |mut d| {
             d.clear_background(Color::WHITE);
             d.draw_text("Hello, world!", 100, 100, 20, Color::BLACK);
-            
+
             egui.draw(&mut d, &thread).unwrap();
         });
     }

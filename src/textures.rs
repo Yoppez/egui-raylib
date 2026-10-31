@@ -1,28 +1,7 @@
 use std::collections::HashMap;
 
 use egui::{ImageData, TextureId, TexturesDelta};
-use raylib::{
-    error::{LoadTextureError, UpdateTextureError},
-    prelude::*,
-};
-
-#[derive(Debug)]
-pub enum HandleTexturesErrors {
-    LoadTextureError(LoadTextureError),
-    UpdateTextureError(UpdateTextureError),
-}
-
-impl From<LoadTextureError> for HandleTexturesErrors {
-    fn from(value: LoadTextureError) -> Self {
-        HandleTexturesErrors::LoadTextureError(value)
-    }
-}
-
-impl From<UpdateTextureError> for HandleTexturesErrors {
-    fn from(value: UpdateTextureError) -> Self {
-        HandleTexturesErrors::UpdateTextureError(value)
-    }
-}
+use sola_raylib::{error::Error, prelude::*};
 
 fn map_texture_filter(filter: egui::TextureFilter) -> TextureFilter {
     match filter {
@@ -44,7 +23,7 @@ pub(crate) fn handle_textures(
     d: &mut RaylibDrawHandle,
     thread: &RaylibThread,
     textures_delta: &TexturesDelta,
-) -> Result<(), HandleTexturesErrors> {
+) -> Result<(), Error> {
     for (id, image_delta) in textures_delta.set.iter() {
         let image_width = image_delta.image.width();
         let image_height = image_delta.image.height();
@@ -59,7 +38,7 @@ pub(crate) fn handle_textures(
                     .flat_map(|x| [x.r(), x.g(), x.b(), x.a()])
                     .collect::<Vec<u8>>();
 
-                if let Some(texture) = map.get_mut(&id) {
+                if let Some(texture) = map.get_mut(id) {
                     texture.set_texture_filter(thread, map_texture_filter(options.minification));
                     texture.set_texture_wrap(thread, map_texture_wrap_mode(options.wrap_mode));
                     if let Some(pos) = image_delta.pos {
@@ -106,7 +85,7 @@ pub(crate) fn handle_textures(
     }
 
     for id in textures_delta.free.iter() {
-        map.remove(&id);
+        map.remove(id);
     }
 
     Ok(())
