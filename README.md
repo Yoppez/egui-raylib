@@ -72,5 +72,19 @@ There are egui features that are not implemented because of Raylib limitations:
 - No OS theme awareness (light or dark mode)
 - No IME
 - Not all mouse cursor types
-- No URL opening (although it can be implemented with the help of other libraries)
+- No URL opening (although it can be implemented with the help of other
+  libraries)
 - No image copy/pasting
+
+## License
+
+Licensed under either of Apache License, Version 2.0 or MIT license at your
+option.
+
+See [LICENSE-APACHE](LICENSE-APACHE) and [LICENSE-MIT](LICENSE-MIT) for details.
+
+### Contribution
+
+Unless you explicitly state otherwise, any contribution intentionally submitted
+for inclusion in egui-raylib by you, as defined in the Apache-2.0 license, shall
+be dual licensed as above, without any additional terms or conditions.
