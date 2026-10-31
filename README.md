@@ -2,16 +2,13 @@
 
 Egui bindings for Raylib.
 
-Built against egui 0.35 and raylib 6.0.
-
 ## Installation
 
 Inside the `Cargo.toml` file:
 
 ```toml
 [dependencies]
-raylib = "6.0" # you can use any raylib feature
-egui-raylib = "0.1"
+egui-raylib = "0.2"
 ```
 
 ## Usage
