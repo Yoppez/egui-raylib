@@ -5,6 +5,8 @@ use egui::{
     TouchPhase, Vec2, ViewportIdMap, ViewportInfo,
 };
 
+use crate::InputState;
+
 const KEYBOARD_KEYS: [KeyboardKey; 110] = [
     KeyboardKey::KEY_NULL,
     KeyboardKey::KEY_APOSTROPHE,
@@ -360,23 +362,65 @@ fn add_event_pointer(
     }
 }
 
+fn add_event_focus(events: &mut Vec<Event>, input_state: &mut InputState, rl: &RaylibHandle) {
+    let is_focused = rl.is_window_focused();
+    match input_state.last_window_focused {
+        None => input_state.last_window_focused = Some(is_focused),
+        Some(ref mut last_is_focused) => {
+            if is_focused != *last_is_focused {
+                *last_is_focused = is_focused;
+                events.push(Event::WindowFocused(is_focused));
+            }
+        }
+    }
+}
+
+fn add_event_cusor_on_screen(
+    events: &mut Vec<Event>,
+    input_state: &mut InputState,
+    rl: &RaylibHandle,
+) {
+    let is_cursor_on_screen = rl.is_cursor_on_screen();
+    match input_state.last_is_cursor_on_screen {
+        None => input_state.last_is_cursor_on_screen = Some(is_cursor_on_screen),
+        Some(ref mut last_is_cursor_on_screen) => {
+            if is_cursor_on_screen != *last_is_cursor_on_screen {
+                *last_is_cursor_on_screen = is_cursor_on_screen;
+                if !is_cursor_on_screen {
+                    events.push(Event::PointerGone);
+                }
+            }
+        }
+    }
+}
+
 fn add_event_other(_events: &mut Vec<Event>, _rl: &RaylibHandle) {
-    // ToDo: PointerGone, WindowFocused
     // ToDo touch: Zoom, Rotate, Rotate
 }
 
-fn get_events(rl: &mut RaylibHandle, modifiers: Modifiers, pixels_per_point: f32) -> Vec<Event> {
+fn get_events(
+    input_state: &mut InputState,
+    rl: &mut RaylibHandle,
+    modifiers: Modifiers,
+    pixels_per_point: f32,
+) -> Vec<Event> {
     let mut events = vec![];
 
     add_event_keys(&mut events, rl, modifiers);
     add_event_text(&mut events, rl);
     add_event_pointer(&mut events, rl, modifiers, pixels_per_point);
+    add_event_focus(&mut events, input_state, rl);
+    add_event_cusor_on_screen(&mut events, input_state, rl);
     add_event_other(&mut events, rl);
 
     events
 }
 
-pub(crate) fn gather_input(rl: &mut RaylibHandle, pixels_per_point: f32) -> RawInput {
+pub(crate) fn gather_input(
+    input_state: &mut InputState,
+    rl: &mut RaylibHandle,
+    pixels_per_point: f32,
+) -> RawInput {
     let mut viewports: ViewportIdMap<ViewportInfo> = ViewportIdMap::default();
     let raylib_scale = rl.get_window_scale_dpi();
     let native_pixels_per_point = raylib_scale.x.min(raylib_scale.y);
@@ -406,7 +450,7 @@ pub(crate) fn gather_input(rl: &mut RaylibHandle, pixels_per_point: f32) -> RawI
             || rl.is_key_down(KeyboardKey::KEY_RIGHT_CONTROL),
     };
 
-    let events = get_events(rl, modifiers, pixels_per_point);
+    let events = get_events(input_state, rl, modifiers, pixels_per_point);
 
     RawInput {
         viewport_id: egui::ViewportId::ROOT,

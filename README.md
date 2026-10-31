@@ -57,7 +57,6 @@ You can check the examples for testing the default egui demo.
 
 These features are not yet implemented, maybe they will be in the future:
 
-- [ ] Inputs for PointerGone and WindowFocused
 - [ ] Touch-screen inputs
 - [ ] Custom mouse cursor
 

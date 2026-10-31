@@ -8,12 +8,18 @@ use std::collections::HashMap;
 use egui::{ClippedPrimitive, Context, TextureId, TexturesDelta, Ui};
 use sola_raylib::{error::Error, prelude::*};
 
+struct InputState {
+    last_window_focused: Option<bool>,
+    last_is_cursor_on_screen: Option<bool>
+}
+
 pub struct EguiRaylib {
     ctx: egui::Context,
     textures: HashMap<TextureId, Texture2D>,
     pixels_per_point: f32,
     last_textures_delta: Option<TexturesDelta>,
     last_clipped_primitives: Option<Vec<ClippedPrimitive>>,
+    input_state: InputState,
 }
 
 impl EguiRaylib {
@@ -24,6 +30,10 @@ impl EguiRaylib {
             last_textures_delta: None,
             last_clipped_primitives: None,
             pixels_per_point,
+            input_state: InputState {
+                last_window_focused: None,
+                last_is_cursor_on_screen: None
+            },
         }
     }
 
@@ -32,7 +42,8 @@ impl EguiRaylib {
     }
 
     pub fn run(&mut self, rl: &mut RaylibHandle, run_ui: impl FnMut(&mut Ui)) {
-        let raw_input: egui::RawInput = input::gather_input(rl, self.pixels_per_point);
+        let raw_input: egui::RawInput =
+            input::gather_input(&mut self.input_state, rl, self.pixels_per_point);
 
         let full_output = self.ctx.run_ui(raw_input, run_ui);
 
