@@ -10,8 +10,8 @@ categories = ["game-development", "graphics", "gui"]
 license = "MIT OR Apache-2.0"
 
 [dependencies]
-egui = "0.35"
+egui = "0.37"
 sola-raylib = "6.3"
 
 [dev-dependencies]
-egui_demo_lib = "0.35"
+egui_demo_lib = "0.37"

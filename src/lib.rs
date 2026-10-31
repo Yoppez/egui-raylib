@@ -48,7 +48,7 @@ impl EguiRaylib {
     }
 
     pub fn draw(&mut self, d: &mut RaylibDrawHandle, thread: &RaylibThread) -> Result<(), Error> {
-        if let Some(textures_delta) = &self.last_textures_delta {
+        if let Some(textures_delta) = &mut self.last_textures_delta {
             match textures::handle_textures(&mut self.textures, d, thread, textures_delta) {
                 Ok(()) => self.last_textures_delta = None,
                 Err(err) => return Err(err),

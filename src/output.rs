@@ -53,6 +53,7 @@ pub(crate) fn handle_platform_output(rl: &mut RaylibHandle, output: PlatformOutp
             OutputCommand::CopyText(text) => rl.set_clipboard_text(&text).unwrap_or_default(),
             OutputCommand::CopyImage(_color_image) => (),
             OutputCommand::OpenUrl(_open_url) => (),
+            OutputCommand::TextSelectionSettled(_string) => (),
         }
     }
 

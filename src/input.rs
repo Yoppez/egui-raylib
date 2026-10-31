@@ -1,8 +1,8 @@
 use sola_raylib::prelude::*;
 
 use egui::{
-    Event, Key, Modifiers, MouseWheelUnit, PointerButton, Pos2, RawInput, Rect, TouchPhase, Vec2,
-    ViewportIdMap, ViewportInfo,
+    Event, Key, Modifiers, MouseWheelSource, MouseWheelUnit, PointerButton, Pos2, RawInput, Rect,
+    TouchPhase, Vec2, ViewportIdMap, ViewportInfo,
 };
 
 const KEYBOARD_KEYS: [KeyboardKey; 110] = [
@@ -355,6 +355,7 @@ fn add_event_pointer(
             delta: scroll_vector,
             phase: TouchPhase::Move,
             modifiers,
+            source: MouseWheelSource::Unknown,
         });
     }
 }
@@ -415,7 +416,6 @@ pub(crate) fn gather_input(rl: &mut RaylibHandle, pixels_per_point: f32) -> RawI
         max_texture_side: Default::default(),
         time: Some(rl.get_time()),
         predicted_dt: Default::default(),
-        modifiers,
         events,
         hovered_files: Default::default(),
         dropped_files: Default::default(),
